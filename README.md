@@ -1,4 +1,4 @@
-# COMP4010-Project2-Group8 - aRt: Recreating Art With R
+# COMP4010-Project2-Group13 - aRt: Recreating Art With R
 
 ## Description
 This project aims to recreate art pieces using R
