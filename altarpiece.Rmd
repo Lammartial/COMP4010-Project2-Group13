@@ -1,0 +1,395 @@
+---
+title: "Altarpiiece I"
+author: "Balashova Ekaterina"
+date: "2025-06-02"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+## 0. Prepare
+
+Load the required libraries
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(ggforce)
+library(grid)
+library(dplyr)
+library(ggpattern)
+```
+
+Set theme
+```{r, message=FALSE, warning=FALSE}
+theme_set(theme_void())
+```
+
+
+## 1. Load and show the original image
+
+```{r, message=FALSE, warning=FALSE}
+img <- png::readPNG("altarpiece_original.png")
+
+g <- rasterGrob(img, interpolate = TRUE)
+
+ggplot() +
+  annotation_custom(g, xmin = 0, xmax = 1, ymin = 0, ymax = 1) +
+  coord_fixed()
+```
+Get the dimensions
+```{r, message=FALSE, warning=FALSE}
+# Get dimensions of the original image
+h <- dim(img)[1]
+w  <- dim(img)[2]
+cat("Width:", w, "Height:", h)
+```
+
+
+## 2. Get drawing!
+
+### 2.1 Background
+
+```{r, message=FALSE, warning=FALSE}
+background <- geom_rect(aes(xmin = 0, xmax = w, ymin = 0, ymax = h), fill = "black")
+
+ggplot() + 
+  background +
+  coord_fixed(xlim = c(0, w), ylim = c(0, h), expand = FALSE)
+```
+
+### 2.2 The circles 
+
+```{r, message=FALSE, warning=FALSE}
+cx <- w * 0.5
+cy <- h * 0.82
+
+circle1 <- geom_circle(aes(x0 = cx, y0 = cy, r = w * 0.375), fill = "#BFBAD7", color = NA)
+circle2 <- geom_circle(aes(x0 = cx, y0 = cy, r = w * 0.325), fill = "#749D78", color = NA)
+
+circles <- list(circle1, circle2)
+
+ggplot() + 
+  background +
+  circles +
+  coord_fixed(xlim = c(0, w), ylim = c(0, h), expand = FALSE)
+```
+
+### 2.2 The sun
+
+```{r, message=FALSE, warning=FALSE}
+
+# Single instances of both types of rays
+one_gold_ray <- data.frame(
+  x = c(0, 30, -30),
+  y = c(w * 0.325, 0, 0)
+)
+
+one_blue_ray <- data.frame(
+  x = c(0, 45, -45),
+  y = c( w * 0.29, 0, 0)
+)
+
+# Function to rotate them
+rotate_shape <- function(shape, angle_deg, cx, cy) {
+  angle_rad <- angle_deg * pi / 180
+  shape %>%
+    mutate(
+      x_rot = cos(angle_rad) * x - sin(angle_rad) * y + cx,
+      y_rot = sin(angle_rad) * x + cos(angle_rad) * y + cy
+    )
+}
+
+# Calculate the angle
+n_repeats <- 40
+angle <- 360 / n_repeats
+
+# Perform the rotation
+gold_rays <- bind_rows(
+  lapply(0:(n_repeats - 1), function(i) {
+    rotate_shape(one_gold_ray, i * angle, cx, cy) %>%
+      mutate(group = i)
+  })
+)
+
+blue_rays <- bind_rows(
+  lapply(0:(n_repeats - 1), function(i) {
+    rotate_shape(one_blue_ray, i * angle + 4.5, cx, cy) %>%
+      mutate(group = i)
+  })
+)
+
+# Get final ray geometry
+gold_sun <- geom_polygon(
+    data = gold_rays,
+    aes(x = x_rot, y = y_rot, group = group),
+    fill = "#EDB452",
+    color = NA
+  )
+
+blue_sun <- geom_polygon(
+    data = blue_rays,
+    aes(x = x_rot, y = y_rot, group = group),
+    fill = "#99A2C5",
+    color = NA
+  )
+
+# The central sun disk
+sun_circle <- geom_circle(aes(x0 = cx, y0 = cy, r = w * 0.24), fill = "#E6AE74", color = NA)
+
+# Assemble the sun
+sun <- list(gold_sun, blue_sun, sun_circle)
+
+ggplot() + 
+  background +
+  circles +
+  sun +
+  coord_fixed(xlim = c(0, w), ylim = c(0, h), expand = FALSE)
+```
+
+### 2.3 Main triangles
+
+```{r, message=FALSE, warning=FALSE}
+t1 <- data.frame(
+  x = c(0, w * 0.5, 1 * w / 7),
+  y = c(h * 0.05, h * 0.69, h * 0.05),
+  group = 1
+)
+
+triangle1 <- geom_polygon_pattern(
+    data = t1,
+    aes(x = x, y = y, group = group),
+    pattern = "gradient",
+    pattern_fill = "#942821",
+    pattern_fill2 = "white",
+    fill = NA,
+    color = NA
+  ) 
+
+t2 <- data.frame(
+  x = c(1 * w / 7, w * 0.5, 2 * w / 7),
+  y = c(h * 0.05, h * 0.69, h * 0.05),
+  group = 1
+)
+
+triangle2 <- geom_polygon_pattern(
+    data = t2,
+    aes(x = x, y = y, group = group),
+    pattern = "gradient",
+    pattern_fill = "#945828",
+    pattern_fill2 = "white",
+    fill = NA,
+    color = NA
+  ) 
+
+t3 <- data.frame(
+  x = c(2 * w / 7, w * 0.5, 3 * w / 7),
+  y = c(h * 0.05, h * 0.69, h * 0.05),
+  group = 1
+)
+
+triangle3 <- geom_polygon_pattern(
+    data = t3,
+    aes(x = x, y = y, group = group),
+    pattern = "gradient",
+    pattern_fill = "#B68130",
+    pattern_fill2 = "white",
+    fill = NA,
+    color = NA
+  ) 
+
+t4 <- data.frame(
+  x = c(3 * w / 7, w * 0.5, 4 * w / 7),
+  y = c(h * 0.05, h * 0.69, h * 0.05),
+  group = 1
+)
+
+triangle4 <- geom_polygon_pattern(
+    data = t4,
+    aes(x = x, y = y, group = group),
+    pattern = "gradient",
+    pattern_fill = "#383221",
+    pattern_fill2 = "white",
+    fill = NA,
+    color = NA
+  ) 
+
+t5 <- data.frame(
+  x = c(4 * w / 7, w * 0.5, 5 * w / 7),
+  y = c(h * 0.05, h * 0.69, h * 0.05),
+  group = 1
+)
+
+triangle5 <- geom_polygon_pattern(
+    data = t5,
+    aes(x = x, y = y, group = group),
+    pattern = "gradient",
+    pattern_fill = "#17192D",
+    pattern_fill2 = "white",
+    fill = NA,
+    color = NA
+  ) 
+
+t6 <- data.frame(
+  x = c(5 * w / 7, w * 0.5, 6 * w / 7),
+  y = c(h * 0.05, h * 0.69, h * 0.05),
+  group = 1
+)
+
+triangle6 <- geom_polygon_pattern(
+    data = t6,
+    aes(x = x, y = y, group = group),
+    pattern = "gradient",
+    pattern_fill = "#10111A",
+    pattern_fill2 = "white",
+    fill = NA,
+    color = NA
+  ) 
+
+t7 <- data.frame(
+  x = c(6 * w / 7, w * 0.5, w),
+  y = c(h * 0.05, h * 0.69, h * 0.05),
+  group = 1
+)
+
+triangle7 <- geom_polygon_pattern(
+    data = t7,
+    aes(x = x, y = y, group = group),
+    pattern = "gradient",
+    pattern_fill = "#342F40",
+    pattern_fill2 = "white",
+    fill = NA,
+    color = NA
+  ) 
+
+main_triangles <- list(triangle1, triangle2, triangle3, triangle4, triangle5, triangle6, triangle7)
+  
+ggplot() + 
+  background +
+  circles +
+  sun +
+  main_triangles +
+  coord_fixed(xlim = c(0, w), ylim = c(0, h), expand = FALSE)
+```
+
+### 2.4 The black triangle and edges
+
+```{r, message=FALSE, warning=FALSE}
+mth <- h * 0.64 # main triangle height
+lh <- mth / 17
+
+tb <- data.frame(
+  x = c(w * 0.5 - w / 34, w * 0.5, w * 0.5 + w / 34),
+  y = c(h * 0.69 - lh, h * 0.69, h * 0.69 - lh),
+  group = 1
+)
+
+black_triangle <- geom_polygon(data = tb, aes(x = x, y = y), fill = "black")
+
+i <- 0:7
+
+# There are many edges of the same color, so we can loop through them
+ve_df <- data.frame(
+  x = i * w / 7,
+  y = h * 0.05,
+  xend = w * 0.5,
+  yend = h * 0.69
+)
+
+vertical_edges <- geom_segment(
+  data = ve_df,
+  aes(x = x, y = y, xend = xend, yend = yend),
+  color = "#C0B5C0",
+  size = 0.5
+)
+
+i <- 1:17
+
+he_df <- data.frame(
+  x = w * 0.5 - i * w / 34,
+  y = h * 0.69 - i * lh,
+  xend = w * 0.5 + i * w / 34,
+  yend = h * 0.69 - i * lh
+)
+
+horizontal_edges <- geom_segment(
+  data = he_df,
+  aes(x = x, y = y, xend = xend, yend = yend),
+  color = "#C0B5C0",
+  size = 0.5
+)
+
+ggplot() + 
+  background +
+  circles +
+  sun +
+  main_triangles +
+  vertical_edges +
+  black_triangle +
+  horizontal_edges +
+  coord_fixed(xlim = c(0, w), ylim = c(0, h), expand = FALSE)
+```
+
+### 2.5 Finishing touches
+
+```{r, message=FALSE, warning=FALSE}
+eye <- geom_circle(aes(x0 = w * 0.5, y0 = h * 0.69 - lh * 0.6, r = 5), fill = "#E6AE74", color = NA)
+
+# Circles on the left side
+cl_list <- list()
+
+for (i in 1:16) {
+  cl_list[[i]] <- data.frame(
+    x0 = (i - 1) * (w / 34) + 15,
+    y0 = h * 0.05 + (i - 1) * lh + 10
+  )
+}
+
+cl_df <- do.call(rbind, cl_list)
+
+circles_left <- geom_circle(data = cl_df, aes(x0 = x0, y0 = y0, r = 6), fill = NA, color = "#C0B5C0")
+
+# Circles on the right side
+cr_list <- list()
+
+for (i in 1:16) {
+  cr_list[[i]] <- data.frame(
+    x0 = w - ((i - 1) * (w / 34) + 15),
+    y0 = h * 0.05 + (i - 1) * lh + 10
+  )
+}
+
+cr_df <- do.call(rbind, cr_list)
+
+circles_right <- geom_circle(data = cr_df, aes(x0 = x0, y0 = y0, r = 6), fill = NA, color = "#C0B5C0")
+
+# Ellipses in the central triangle
+ellipse_list <- list()
+
+for (i in 1:16) {
+  ellipse_list[[i]] <- data.frame(
+    x0 = w * 0.5,
+    y0 = h * 0.05 + (i - 0.5) * lh,
+    a = w * (17 - i + 1) / 17 / 7 / 2 - 1,
+    b = lh / 2 - 1
+  )
+}
+
+ellipse_df <- do.call(rbind, ellipse_list)
+
+ellipses <- geom_ellipse(data = ellipse_df, aes(x0 = x0, y0 = y0, a = a, b = b, angle = 0), fill = NA, color = "#C0B5C0")
+  
+  
+fin <- list(eye, circles_left, circles_right, ellipses)
+
+ggplot() + 
+  background +
+  circles +
+  sun +
+  main_triangles +
+  vertical_edges +
+  black_triangle +
+  horizontal_edges +
+  fin +
+  coord_fixed(xlim = c(0, w), ylim = c(0, h), expand = FALSE)
+```
+
