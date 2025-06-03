@@ -3,8 +3,8 @@ title: "Altarpiece I"
 author: "Balashova Ekaterina"
 date: "2025-06-02"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
   word_document: default
 ---
 

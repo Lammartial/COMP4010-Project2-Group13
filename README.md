@@ -16,8 +16,8 @@ While there are existing efforts in the R community to produce generative art or
 
 We will focus on the recreation of:
 
-* **"The Mahatmas Present Standing Point"** by Hilma af Klint (geometric abstraction)
-* **"South Wind, Clear Sky"** by Hokusai (curves, gradients, and layering)
+* **"Altarpiece – No 1"** – Group X. Hilma af Klint 1907 (geometric abstraction)
+* **"Red Fuji"** by Hokusai (curves, gradients, and layering)
 * Potential bonus: **Minimalist reinterpretation of Van Gogh's "Starry Night"**
 
 These works were selected because they present varying technical challenges — from geometric layout to line curves and color gradients — which align well with R’s graphical capabilities.
