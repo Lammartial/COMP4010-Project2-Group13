@@ -4,11 +4,11 @@
 
 ## **Description**
 
-This project explores the intersection of art and data visualization by recreating well-known artworks using R. We will use R's advanced plotting and graphics capabilities to translate selected pieces into code-generated representations. Our focus will be on styles where R’s strengths — particularly in grid-based systems, vector graphics, and color manipulation — can be meaningfully applied.
+This project explores the intersection of art and data visualization by recreating well-known artworks using R. We will use R's advanced plotting and graphics capabilities to translate selected pieces into code-generated representations. Our focus will be on styles where R's strengths — particularly in grid-based systems, vector graphics, and color manipulation — can be meaningfully applied.
 
 ## **Motivation**
 
-This project allows us to expand our technical skills in R while exploring artistic expression. We are especially interested in how R’s plotting ecosystem (e.g., `ggplot2`, `grid`, `ggforce`, `geomtextpath`, `patchwork`) can be used not only for data communication but also for creative visual storytelling.
+This project allows us to expand our technical skills in R while exploring artistic expression. We are especially interested in how R's plotting ecosystem (e.g., `ggplot2`, `grid`, `ggforce`, `geomtextpath`, `patchwork`) can be used not only for data communication but also for creative visual storytelling.
 
 While there are existing efforts in the R community to produce generative art or mimic certain visual aesthetics, our focus will be on **manually recreating iconic artworks**, using custom R code to explore techniques like layering, path creation, gradients, and geometric composition. Through this, we aim to deepen our understanding of programmatic art, explore different artistic styles, and potentially develop reusable patterns or helper functions to simplify recreating other pieces.
 
@@ -17,14 +17,14 @@ While there are existing efforts in the R community to produce generative art or
 We will focus on the recreation of:
 
 * **"Altarpiece – No 1"** – Group X. Hilma af Klint 1907 (geometric abstraction)
-* **"Red Fuji"** by Hokusai (curves, gradients, and layering)
+* **"Red Fuji"** by Hokusai (curves, gradients, and layering) - Located in `Red Fuji/images/Red Fuji by Hokusai.jpg`
 * Potential bonus: **Minimalist reinterpretation of Van Gogh's "Starry Night"**
 
-These works were selected because they present varying technical challenges — from geometric layout to line curves and color gradients — which align well with R’s graphical capabilities.
+These works were selected because they present varying technical challenges — from geometric layout to line curves and color gradients — which align well with R's graphical capabilities.
 
 We plan to use the following tools and techniques:
 
-* **Packages**: `ggplot2`, `grid`, `ggforce`, `geomtextpath`, `colorspace`, `patchwork`
+* **Packages**: `ggplot2`, `grid`, `ggforce`, `geomtextpath`, `colorspace`, `magick`
 * **Techniques**: Layered plotting, coordinate manipulation, path construction, transparency/alpha blending, and text-based path drawing.
 
 ## **Deliverables**
@@ -71,7 +71,7 @@ We will evaluate our success based on:
 
 * **Visual resemblance**: How closely the R recreation resembles the original artwork in layout, color, and overall feel.
 * **Technical execution**: Use of clean, modular, and reusable code.
-* **Creativity & interpretation**: Artistic merit and adaptation within R’s constraints.
+* **Creativity & interpretation**: Artistic merit and adaptation within R's constraints.
 * **Documentation**: Quality of explanations and clarity of the final presentation.
 
 ## **Timeline**

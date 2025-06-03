@@ -2,7 +2,7 @@
 
 This project explores the intersection of art and data visualization by recreating the iconic "Red Fuji" by Hokusai using R.
 
-![Original Image](images/Red%20Fuji%20by%20Hokusai.jpg)
+![Original Image](Red%20Fuji%20by%20Hokusai.jpg)
 
 ## Motivation
 
@@ -22,7 +22,7 @@ The recreation focuses on "Red Fuji" by Hokusai. The technical approach involves
 
 The final recreated artwork can be seen here, alongside the original image and visualizations of the extracted data points:
 
-![Recreated Red Fuji](images/final.png)
+![Recreated Red Fuji](final.png)
 
 
 ## Files
